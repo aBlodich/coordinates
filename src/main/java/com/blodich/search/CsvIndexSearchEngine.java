@@ -4,11 +4,6 @@ package com.blodich.search;
 import java.util.SortedMap;
 
 public class CsvIndexSearchEngine implements IndexSearchEngine {
-    private String path;
-
-    public CsvIndexSearchEngine(String path) {
-        this.path = path;
-    }
 
     public SortedMap<String, Long> search(SortedMap<String, Long> indexes, String prefix) {
         if (prefix.length() > 0) {

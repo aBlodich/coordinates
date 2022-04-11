@@ -16,7 +16,6 @@ import java.util.Scanner;
 class Main {
     public static void main(String[] args) {
         String path = "C:\\airports.csv";
-        //String path = "C:/Users/tatar/Desktop/1.csv";
         int column = -1;
         try {
             if (args.length > 0)
@@ -37,7 +36,7 @@ class Main {
         }
         if (column == -1) return;
         FileIndexer fileIndexer = new CsvFileIndexer(path, column);
-        IndexSearchEngine searchEngine = new CsvIndexSearchEngine(path);
+        IndexSearchEngine searchEngine = new CsvIndexSearchEngine();
         CsvRandomAccessReader csvRandomAccessReader = new FilteredCsvRandomAccessReader(path, searchEngine);
         FileProcessor filePreprocessor = new FileProcessor(fileIndexer, csvRandomAccessReader);
         try {
