@@ -2,7 +2,10 @@ package com.blodich.reader;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
+import tree.RTree;
+import tree.geometry.Point;
 
 /**
  * Базовый интерфейс для чтения файла с помощью индексов
@@ -10,10 +13,11 @@ import java.util.SortedMap;
 public interface CsvRandomAccessReader {
     /**
      * Метод для чтения
-     * @param indexes SortedMap индексов
-     * @param prefix String префикс для поиска по индексу
-     * @return ArrayList, содержащий найденные строки
+     * @param tree Rtree с индексами
+     * @param target Целевая точка для поиска
+     * @param delta Величина изменения координаты
+     * @return List, содержащий найденные строки
      * @throws IOException
      */
-    ArrayList<String> read(SortedMap<String, Long> indexes, String prefix) throws IOException;
+    List<String> read(RTree tree, Point target, double delta) throws IOException;
 }

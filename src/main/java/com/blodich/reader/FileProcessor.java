@@ -1,17 +1,20 @@
 package com.blodich.reader;
 
 import com.blodich.indexer.FileIndexer;
+import com.blodich.indexer.RTreeFileIndexer;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
+import tree.RTree;
+import tree.geometry.Point;
 
 /**
  * Обработчик файла
  */
 public class FileProcessor {
-    private FileIndexer indexer;
-    private SortedMap<String, Long> indexes;
-    private int size;
+    private RTreeFileIndexer indexer;
+    private RTree indexes;
     private CsvRandomAccessReader reader;
 
     /**
@@ -19,29 +22,27 @@ public class FileProcessor {
      * @param indexer реализация FileIndexer
      * @param reader реализация ScvRandomAccessReader
      */
-    public FileProcessor(FileIndexer indexer, CsvRandomAccessReader reader) {
+    public FileProcessor(RTreeFileIndexer indexer, CsvRandomAccessReader reader) {
         this.indexer = indexer;
         this.reader = reader;
     }
 
     /**
      * Препроцессинг файла, проводит индексацию файла
-     * @return Возвращает количество проидексированных строк
      * @throws IOException
      */
-    public int preprocess() throws IOException {
+    public void preprocess() throws IOException {
         this.indexes =  indexer.index();
-        this.size = indexes.size();
-        return this.size;
     }
 
     /**
      * Осуществляет поиск по файлу с помощью CsvRandomAccessReader
-     * @param prefix префикс поиска
-     * @return возвращает ArrayList, содержащий все найденные строки
+     * @param target префикс поиска
+     * @param delta величина изменения координат
+     * @return возвращает List, содержащий все найденные строки
      * @throws IOException
      */
-    public ArrayList<String> process(String prefix) throws IOException {
-        return reader.read(indexes, prefix);
+    public List<String> process(Point target, double delta) throws IOException {
+        return reader.read(indexes, target, delta);
     }
 }

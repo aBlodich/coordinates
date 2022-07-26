@@ -1,12 +1,17 @@
 package com.blodich.reader;
 
+import com.blodich.indexer.RTreeFileIndexer;
 import com.blodich.search.IndexSearchEngine;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
+import tree.RTree;
+import tree.geometry.Point;
 
 /**
  * Реализация интерфейса CsvRandomAccessReader
@@ -27,18 +32,20 @@ public class FilteredCsvRandomAccessReader implements CsvRandomAccessReader {
 
     /**
      * Реализация метода read для поиска по индексам с помощью IndexSearchEngine
-     * @param indexes SortedMap индексов
-     * @param prefix String префикс для поиска по индексу
-     * @return
+     * @param tree Rtree с индексами
+     * @param target Целевая точка для поиска
+     * @param delta Величина изменения координат
+     * @return List, содержащий найденные записи в файле
      * @throws IOException
      */
     @Override
-    public ArrayList<String> read(SortedMap<String, Long> indexes, String prefix) throws IOException {
-        try (RandomAccessFile raf = new RandomAccessFile(new File(path), "r")) {
+    public List<String> read(RTree tree, Point target, double delta) throws IOException {
+            ;
+        try (RandomAccessFile raf = new RandomAccessFile(new File(FilteredCsvRandomAccessReader.class.getClassLoader().getResource("airports.csv").getPath()), "r")) {
             ArrayList<String> result = new ArrayList<>();
-            var values = searchEngine.search(indexes, prefix).values();
-            for (var value: values) {
-                raf.seek(value);
+            var points = searchEngine.search(tree, target, delta);
+            for (var point : points) {
+                raf.seek(point.getSeek());
                 result.add(raf.readLine());
             }
             return result;
