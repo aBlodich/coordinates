@@ -29,7 +29,6 @@ public class RTreeFileIndexer{
         double elevation = Double.parseDouble(splited[columns[2]]);
         Point point = new Point(latitude, longitude, seek);
         seek += (row.getBytes(StandardCharsets.UTF_8).length + 2);
-        System.out.println(point);
         tree.add(point);
       }
       return tree;
